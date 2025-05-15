@@ -149,9 +149,10 @@ TRUNG TÂM Y TẾ HUYỆN MANG THÍT
   }
   function submitForm() {
 	  localStorage.clear();
+	  counter = 0;
     const hoTen = document.getElementById("hoTen").value.trim();
     const khoaPhong = document.getElementById("khoaPhong").value;
-    const maCanBo = 123456;
+    const maCanBo = now.toLocaleString('vi-VN');
 
     if (!hoTen || !khoaPhong || !maCanBo) {
       alert("Vui lòng nhập đầy đủ thông tin.");
@@ -199,7 +200,7 @@ async function sendData_New() {
 		ma_can_bo,
 		ngay: today,
 		phut_xem: 0,
-		buoi_hoc:"Buoi-02-22042025"
+		buoi_hoc:"Lop-hoc-SXH"
 	}]).select();
 
       if (error) {
