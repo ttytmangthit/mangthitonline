@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>TRUNG TÂM Y TẾ HUYỆN MANG THÍT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: #e8f1f8;
+      color: #333;
+    }
+    header {
+      background-color: #0077b6;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 0.25rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      background-color: #0077b6;
+      color: white;
+      cursor: pointer;
+    }
+    #video, #timer { display: none; margin-top: 2rem; }
+    #ytplayer {
+      width: 100%;
+      height: 360px;
+      border-radius: 12px;
+      border: none;
+    }
+    .time-display {
+      text-align: center;
+      font-size: 1.25rem;
+      margin-top: 1rem;
+    }
+    .fullscreen-btn {
+      margin-top: 1rem;
+      width: 100%;
+      background-color: #00b4d8;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+TRUNG TÂM Y TẾ HUYỆN MANG THÍT
+</header>
+
+<div class="container" id="form">
+<div style="text-align: center; color: red;">
+<label><b>VUI LÒNG NHẬP THÔNG TIN BÊN DƯỚI VÀ BẤM "ĐIỂM DANH" ĐỂ VÀO TRỰC TUYẾN</b></label>
+</div>
+  <label>Họ tên:<b style="color:red;">*</b>
+    <input type="text" id="hoTen">
+  </label>
+  <label>Khoa/Phòng:<b style="color:red;">*</b>
+    <select id="khoaPhong"  placeholder="Gõ vào tên khoa/phòng để tìm nhanh...">
+      <option value="">-- Chọn phòng/khoa --</option>
+      <option>Ban giám đốc</option><option>Phòng Tổ chức Hành chính</option><option>Phòng tài chính Kế toán</option>
+      <option>Phòng Kế hoạch - Nghiệp vụ & ĐD</option><option>Phòng Dân số - Truyền thông & GDSK</option><option>Khoa Cấp cứu - HSTC & CĐ</option>
+      <option>Khoa Khám bệnh</option><option>Khoa Nội - Truyền nhiễm</option><option>Khoa Ngoại - PT - GMHS</option>
+      <option>Khoa Nhi</option><option>Khoa Chăm sóc sức khỏe sinh sản & PS</option><option>Khoa Y học cổ truyền - Phục hồi chức năng</option>
+      <option>Khoa Dược - TTB - VTYT</option><option>Khoa Xét nghiệm - CĐHA - KSNK</option><option>Khoa Kiểm soát bệnh tật & HIV/AIDS</option>
+      <option>Khoa Y tế công cộng - ATTP & DD</option><option>Trạm Y tế thị trấn Cái Nhum </option>
+      <option>Trạm Y tế xã An Phước</option><option>Trạm Y tế xã Bình Phước</option>
+      <option>Trạm Y tế xã Chánh An</option><option>Trạm Y tế xã Long Mỹ</option><option>Trạm Y tế xã Hòa Tịnh</option>
+      <option>Trạm Y tế xã Mỹ An</option><option>Trạm Y tế xã Mỹ Phước</option><option>Trạm Y tế xã Nhơn Phú</option>
+      <option>Trạm Y tế xã Tân An Hội</option><option>Trạm Y tế xã Tân Long</option><option>Trạm Y tế xã Tân Long Hội</option>
+    </select>
+  </label>
+  <button onclick="submitForm()">Điểm danh</button>
+  <label style="visibility:hidden">Mã cán bộ:
+    <input type="text" id="maCanBo" style="visibility:hidden">
+  </label>
+  
+</div>
+
+<div class="container" id="video">
+ <iframe width="100%" height="450px" src="https://www.youtube.com/embed/LrFK4BjjvBo?si=TYcmvnh9SYeWjnxb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<div class="container" id="timer">
+  <div class="time-display">
+    - Xin chào: <b><span id="hoten">(...)</span></b>
+  </div>
+  <div class="time-display">
+    - Bạn đã theo dõi được: <span id="time">0</span> phút
+  </div>
+	<div class="time-display" style="font-size:11PX;text-align:left">
+    <b><i>*** GHI CHÚ: Nếu không xem được toàn màn hình (do Zalo không cho phép xoay màn hình ngan), anh/chị vui lòng thực hiện như sau:</i></b></br>
+	<span>- Trở lại màn hình Zalo --> Vào cuộc trò chuyện có chứa đường link cuộc họp</span></br>
+	<span>- Nhấn giữ link 2 giây và chọn mục "Mở link bằng trình duyệt" --> vào lại buổi học</span>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+  const SUPABASE_URL = "https://otsbsypiorknbeaacrgg.supabase.co";  // <-- sửa tại đây
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90c2JzeXBpb3JrbmJlYWFjcmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2MTkzMjMsImV4cCI6MjA2MDE5NTMyM30.2JosJWWXr6Dz7GDZ5h9Df9dnVulMJK-CJ-9bFK-x0cY"; // <-- sửa tại đây
+  const { createClient } = supabase;
+  const _supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+  
+
+  const today = new Date().toISOString().split('T')[0];
+  let counter = 0;
+  let interval = null;
+  
+    const choice = new TomSelect('#khoaPhong', {
+      create: false,
+      sortField: { field: "text", direction: "asc" },
+      placeholder: "Gõ vào tên khoa/phòng để tìm nhanh...",
+    });
+  function submitForm1() {
+	alert("LỚP HỌC SẼ BẮT ĐẦU VÀO LÚC 19 GIỜ 30 PHÚT, VUI LÒNG QUAY LẠI SAU NHÉ! TRÂN TRỌNG CÁM ƠN!");
+  }
+  function submitForm() {
+	  localStorage.clear();
+    const hoTen = document.getElementById("hoTen").value.trim();
+    const khoaPhong = document.getElementById("khoaPhong").value;
+    const maCanBo = 123456;
+
+    if (!hoTen || !khoaPhong || !maCanBo) {
+      alert("Vui lòng nhập đầy đủ thông tin.");
+      return;
+    }
+    localStorage.setItem("dd_hoTen", hoTen);
+    localStorage.setItem("dd_khoa", khoaPhong);
+    localStorage.setItem("dd_ma", maCanBo);
+    localStorage.setItem("dd_start", Date.now());
+    localStorage.setItem("dd_date", today);
+
+    document.getElementById("form").style.display = "none";
+    document.getElementById("video").style.display = "block";
+    document.getElementById("timer").style.display = "block";
+	document.getElementById("hoten").innerText = localStorage.getItem("dd_hoTen");
+    sendData_New();
+    startCounter();
+  }
+
+  function startCounter() {
+    interval = setInterval(() => {
+      counter++;
+      localStorage.setItem("_counter", counter);
+      document.getElementById("time").innerText = counter;
+      if (counter % 5 === 0) {
+        sendData();
+      }
+    }, 60000);
+  }
+  
+async function sendData_New() {
+  const ho_ten = localStorage.getItem("dd_hoTen");
+  const khoa_phong = localStorage.getItem("dd_khoa");
+  const ma_can_bo = localStorage.getItem("dd_ma");
+
+  const delay = Math.floor(Math.random() * 5000); // rải tải tránh nghẽn
+
+  setTimeout(async () => {
+    try {
+		 const { data, error } = await _supabaseClient
+        .from("Diem_danh")
+	.insert([{
+		ho_ten,
+		khoa_phong,
+		ma_can_bo,
+		ngay: today,
+		phut_xem: 0,
+		buoi_hoc:"Buoi-02-22042025"
+	}]).select();
+
+      if (error) {
+        console.error("❌ Lỗi ghi Supabase:", error);
+      } else {
+        const insertedId = data?.[0]?.id;
+		localStorage.setItem("dd_id", insertedId);
+        console.log("✅ Đã ghi dòng mới, ID:", insertedId ?? "(không rõ)");
+      }
+    } catch (err) {
+      console.error("❌ Lỗi ngoại lệ khi gửi:", err);
+    }
+  }, delay);
+} 
+  
+
+async function sendData() {
+  const id =  Number(localStorage.getItem("dd_id"));
+  if (!id) {
+    console.warn("⚠️ Không tìm thấy ID để cập nhật");
+    return;
+  }
+
+  try {
+    const { error } = await _supabaseClient
+      .from("Diem_danh")
+      .update({ phut_xem: counter})
+      .eq("id", id);
+
+    if (error) {
+      console.error("❌ Lỗi cập nhật phut_xem:", error);
+    } else {
+      console.log("✅ Cập nhật phut_xem +10 thành công theo ID:", id);
+    }
+  } catch (err) {
+    console.error("❌ Lỗi exception khi update:", err);
+  }
+}
+
+
+  function toggleFullscreen() {
+    const iframe = document.getElementById("ytplayer");
+    iframe.style.height = iframe.style.height === "90vh" ? "360px" : "90vh";
+  }
+
+	async function kiemTraDdIdTonTai() {
+	  const id = Number(localStorage.getItem("dd_id"));
+	  if (!id) {
+		console.log("⚠️ Không có dd_id trong localStorage. Bỏ qua kiểm tra.");
+		return false;
+	  }
+	  try {
+		const { data: rows, error } = await _supabaseClient
+		  .from("Diem_danh")
+		  .select("id")
+		  .eq("id", id)
+		  .limit(1);
+
+		if (error) {
+		  console.error("❌ Lỗi SELECT kiểm tra id:", error);
+		  return false;
+		}
+	if (rows.length > 0) {
+
+		console.log("✅ Dòng còn tồn tại. Không cần insert lại.");
+		  return true;
+		} else {
+		  console.log("ℹ️ Không tìm thấy dòng. ");
+		  return false;
+		}
+	  } catch (err) {
+		console.error("❌ Lỗi ngoại lệ khi kiểm tra:", err);
+		return false;
+	  }
+	}
+	window.onload = async () => { // phải thêm async ở đây
+	  const savedDate = localStorage.getItem("dd_date");
+	  const tonTai = await kiemTraDdIdTonTai();
+	  
+	  if (localStorage.getItem("dd_id") && savedDate === today && tonTai) {
+		document.getElementById("form").style.display = "none";
+		document.getElementById("video").style.display = "block";
+		document.getElementById("timer").style.display = "block";
+
+		counter = Number(localStorage.getItem("_counter")) || 0;
+		document.getElementById("hoten").innerText = localStorage.getItem("dd_hoTen") || "";
+		document.getElementById("time").innerText = counter;
+		startCounter();
+	  } else {
+		localStorage.clear();
+	  }
+	};
+</script>
+
+</body>
+</html>
