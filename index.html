@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>TRUNG TÂM Y TẾ HUYỆN MANG THÍT</title>
+  <title>TRUNG TÂM Y TẾ KHU VỰC MANG THÍT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
@@ -279,7 +279,6 @@ async function sendData() {
 	window.onload = async () => { // phải thêm async ở đây
 	  const savedDate = localStorage.getItem("dd_date");
 	  const tonTai = await kiemTraDdIdTonTai();
-	  
 	  if (localStorage.getItem("dd_id") && savedDate === today && tonTai) {
 		document.getElementById("form").style.display = "none";
 		document.getElementById("video").style.display = "block";
