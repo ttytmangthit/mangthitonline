@@ -70,18 +70,33 @@
       width: 100%;
       background-color: #00b4d8;
     }
+	
+	.wrap { width:100%; overflow:hidden; border:1px solid #ccc; padding:8px; box-sizing:border-box; background: linear-gradient(90deg, var(--panel-start), var(--panel-end));
+      border: 1px solid rgba(4,82,110,0.06);
+      box-shadow: 0 6px 20px rgba(3,58,74,0.06);}
+    .track { display:flex; gap:50px; white-space:nowrap; transform:translateX(0); }
+    .item { flex: 0 0 auto; font-size:18px; color: #03506b;}
   </style>
 </head>
 <body>
 
 <header>
-TRUNG TÂM Y TẾ HUYỆN MANG THÍT
-</header>
+TRUNG TÂM Y TẾ KHU VỰC MANG THÍT
 
+</header>
+<div class="wrap" id="wrap">
+    <div class="track" id="track">
+      <div class="item" style="color:red">Lớp học: Xây dựng chiến lược ngành y tế – cấp bệnh viện/phòng khám & cấp phòng, khoa</div>
+	  <div class="item">        |<||>|       </div>
+      <div class="item">Nếu không xem được toàn màn hình (do Zalo không cho phép xoay màn hình ngan), anh/chị vui lòng thực hiện như sau: Trở lại màn hình Zalo --> Vào cuộc trò chuyện có chứa đường link cuộc họp. Nhấn giữ link 2 giây và chọn mục "Mở link bằng trình duyệt"</div>
+	  <div class="item">        |<||>|       </div>
+    </div>
+  </div>
 <div class="container" id="form">
 <div style="text-align: center; color: red;">
-<label><b>VUI LÒNG NHẬP THÔNG TIN BÊN DƯỚI VÀ BẤM "ĐIỂM DANH" ĐỂ VÀO TRỰC TUYẾN</b></label>
+<label><b>VUI LÒNG NHẬP THÔNG TIN BÊN DƯỚI VÀ BẤM "ĐIỂM DANH" ĐỂ VÀO LỚP HỌC</b></label>
 </div>
+
   <label>Họ tên:<b style="color:red;">*</b>
     <input type="text" id="hoTen">
   </label>
@@ -121,7 +136,6 @@ TRUNG TÂM Y TẾ HUYỆN MANG THÍT
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
@@ -130,8 +144,19 @@ TRUNG TÂM Y TẾ HUYỆN MANG THÍT
   const { createClient } = supabase;
   const _supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
   
-
-  const today = new Date().toISOString().split('T')[0];
+	function todayLocalISO() {
+	  const d = new Date();
+	  const y = d.getFullYear();
+	  const m = String(d.getMonth()+1).padStart(2,'0');
+	  const day = String(d.getDate()).padStart(2,'0');
+	  return `${y}-${m}-${day}`;
+	}
+	const today = todayLocalISO();
+	
+	function nowVietnamTime() {
+	  const now = new Date();
+	  return now.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+	}
   let counter = 0;
   let interval = null;
   
@@ -141,11 +166,12 @@ TRUNG TÂM Y TẾ HUYỆN MANG THÍT
       placeholder: "Gõ vào tên khoa/phòng để tìm nhanh...",
     });
   function submitForm1() {
-	alert("LỚP HỌC BẮT ĐẦU VÀO LÚC 19 GIỜ 30 PHÚT, ĐIỂM DÁNH SẼ ĐƯỢC MỞ LÚC 19 GIỜ, VUI LÒNG QUAY LẠI SAU NHÉ! TRÂN TRỌNG CÁM ƠN!");
+	alert("LỚP HỌC SẼ BẮT ĐẦU VÀO LÚC 19 GIỜ 30 PHÚT, VUI LÒNG QUAY LẠI SAU NHÉ! TRÂN TRỌNG CÁM ƠN!");
   }
+  
   function submitForm() {
-localStorage.clear();
-counter = 0;
+	localStorage.clear();
+	counter = 0;
     const hoTen = document.getElementById("hoTen").value.trim();
     const khoaPhong = document.getElementById("khoaPhong").value;
     const maCanBo = "123456";
@@ -170,6 +196,12 @@ counter = 0;
 
   function startCounter() {
     interval = setInterval(() => {
+		const savedDate = localStorage.getItem("dd_date");
+		if (savedDate !== today || counter >180) {
+			console.warn("⚠️ Đã qua ngày khác, vui lòng điển danh lại!");
+			localStorage.clear();
+			location.reload();
+		}
       counter++;
       localStorage.setItem("_counter", counter);
       document.getElementById("time").innerText = counter;
@@ -183,7 +215,8 @@ async function sendData_New() {
   const ho_ten = localStorage.getItem("dd_hoTen");
   const khoa_phong = localStorage.getItem("dd_khoa");
   const ma_can_bo = localStorage.getItem("dd_ma");
-
+  const now = new Date();
+  
   const delay = Math.floor(Math.random() * 5000); // rải tải tránh nghẽn
 
   setTimeout(async () => {
@@ -196,7 +229,9 @@ async function sendData_New() {
 		ma_can_bo,
 		ngay: today,
 		phut_xem: 0,
-		buoi_hoc:"Lop-hoc-SXH"
+		buoi_hoc:"Lop-hoc-SXH",
+		updated_at:nowVietnamTime(),
+		submit_at:nowVietnamTime()
 	}]).select();
 
       if (error) {
@@ -217,19 +252,21 @@ async function sendData() {
   const id =  Number(localStorage.getItem("dd_id"));
   if (!id) {
     console.warn("⚠️ Không tìm thấy ID để cập nhật");
+	localStorage.clear();
+    location.reload();
     return;
   }
 
   try {
     const { error } = await _supabaseClient
       .from("Diem_danh")
-      .update({ phut_xem: counter})
+      .update({ phut_xem: counter,updated_at: nowVietnamTime()})
       .eq("id", id);
 
     if (error) {
       console.error("❌ Lỗi cập nhật phut_xem:", error);
     } else {
-      console.log("✅ Cập nhật phut_xem +10 thành công theo ID:", id);
+      console.log("✅ Cập nhật thời gian thành công theo ID:", id);
     }
   } catch (err) {
     console.error("❌ Lỗi exception khi update:", err);
@@ -274,6 +311,10 @@ async function sendData() {
 	}
 	window.onload = async () => { // phải thêm async ở đây
 	  const savedDate = localStorage.getItem("dd_date");
+	  console.log(localStorage.getItem("dd_date"));
+	  console.log(today);
+	  console.log(savedDate === today);
+	  console.log(localStorage.getItem("dd_id"));
 	  const tonTai = await kiemTraDdIdTonTai();
 	  if (localStorage.getItem("dd_id") && savedDate === today && tonTai) {
 		document.getElementById("form").style.display = "none";
@@ -285,9 +326,78 @@ async function sendData() {
 		document.getElementById("time").innerText = counter;
 		startCounter();
 	  } else {
+		localStorage.setItem("_counter", 0)
 		localStorage.clear();
 	  }
 	};
+	
+	(function(){
+    const track = document.getElementById('track');
+    const wrap = document.getElementById('wrap');
+
+    // nhân đôi một lần để loop mượt
+    track.innerHTML = track.innerHTML + track.innerHTML;
+
+    // tốc độ tính theo px/giây — chỉnh giá trị này để tăng/giảm tốc độ
+    let SPEED_PX_PER_SEC = 60; // ví dụ: 60 px/giây
+
+    let pos = 0;
+    let lastTs = null;
+    let rafId = null;
+
+    function step(ts){
+      if (!lastTs) lastTs = ts;
+      const dt = (ts - lastTs) / 1500; // giây
+      lastTs = ts;
+
+      pos -= SPEED_PX_PER_SEC * dt;
+
+      // reset mượt khi đi quá nửa track (vì track đã nhân đôi)
+      const halfWidth = track.scrollWidth / 2;
+      if (Math.abs(pos) >= halfWidth) {
+        // cộng modulo để tránh nhảy lớn
+        pos += halfWidth * Math.floor(Math.abs(pos) / halfWidth);
+      }
+
+      track.style.transform = `translateX(${pos}px)`;
+      rafId = requestAnimationFrame(step);
+    }
+
+
+//Chạy chữ////////
+    // khởi chạy
+    rafId = requestAnimationFrame(step);
+
+    // pause / resume đúng cách
+    function pause(){
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+        lastTs = null;
+      }
+    }
+    function resume(){
+      if (rafId === null) {
+        lastTs = null;
+        rafId = requestAnimationFrame(step);
+      }
+    }
+
+    wrap.addEventListener('mouseenter', pause);
+    wrap.addEventListener('mouseleave', resume);
+
+    // hỗ trợ touch: tap để toggle pause/resume
+    wrap.addEventListener('touchstart', (e) => {
+      if (rafId) pause(); else resume();
+    });
+
+    // cho phép thay tốc độ runtime từ console: window._marquee.setSpeed(120)
+    window._marquee = {
+      pause, resume,
+      setSpeed(pxPerSec){ SPEED_PX_PER_SEC = Number(pxPerSec) || 0; },
+      getSpeed(){ return SPEED_PX_PER_SEC; }
+    };
+  })();
 </script>
 
 </body>
