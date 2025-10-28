@@ -86,7 +86,7 @@ TRUNG TÂM Y TẾ KHU VỰC MANG THÍT
 </header>
 <div class="wrap" id="wrap">
     <div class="track" id="track">
-      <div class="item" style="color:red">Lớp học: Xây dựng chiến lược ngành y tế – cấp bệnh viện/phòng khám & cấp phòng, khoa</div>
+      <div class="item" style="color:red">Buổi 02: lớp xây dựng chiến lược ngành y tế – cấp bệnh viện/phòng khám & cấp phòng, khoa</div>
 	  <div class="item">        |<||>|       </div>
       <div class="item">Nếu không xem được toàn màn hình (do Zalo không cho phép xoay màn hình ngang), anh/chị vui lòng thực hiện như sau: Trở lại màn hình Zalo --> Vào cuộc trò chuyện có chứa đường link cuộc họp. Nhấn giữ link 2 giây và chọn mục "Mở link bằng trình duyệt"</div>
 	  <div class="item">        |<||>|       </div>
@@ -111,7 +111,7 @@ TRUNG TÂM Y TẾ KHU VỰC MANG THÍT
       <option>Khoa Y tế công cộng - ATTP & DD</option>
     </select>
   </label>
-  <button onclick="submitForm1()">Điểm danh</button>
+  <button onclick="submitForm()">Điểm danh</button>
   <label style="visibility:hidden">Mã cán bộ:
     <input type="text" id="maCanBo" style="visibility:hidden">
   </label>
@@ -229,7 +229,7 @@ async function sendData_New() {
 		ma_can_bo,
 		ngay: today,
 		phut_xem: 0,
-		buoi_hoc:"Lop-hoc-SXH",
+		buoi_hoc:"Lop-hoc-XDCL",
 		updated_at:nowVietnamTime(),
 		submit_at:nowVietnamTime()
 	}]).select();
